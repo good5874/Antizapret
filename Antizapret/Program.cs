@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Antizapret
 {
@@ -16,7 +17,9 @@ namespace Antizapret
 
             var response = client.Get(request);
             var content = response.Content;
-            var domains = content.Replace("\n", "\nadd list=blocklist address=");
+            var domains = content.Replace("*.","").Replace("\n", "\nadd list=blocklist address=");
+            domains = Regex.Replace(domains, @"[а-яА-ЯёЁ]", "");
+            var resultDomains = domains.Replace("\n", "\nadd list=blocklist address=");
 
             string writePath = @"file.txt";
 
@@ -24,7 +27,7 @@ namespace Antizapret
             {
                 using (StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default))
                 {
-                    sw.WriteLine(domains);
+                    sw.WriteLine(resultDomains);
                 }
                 Console.WriteLine("Запись выполнена");
             }
