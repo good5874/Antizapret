@@ -16,10 +16,10 @@ namespace Antizapret
             request.AddParameter("type", "json");
 
             var response = client.Get(request);
-            var content = response.Content;
+            var content = "/ip firewall address-list\n" + response.Content;
             var domains = content.Replace("*.","");
             domains = Regex.Replace(domains, @"[а-яА-ЯёЁ]", "");
-            var resultDomains = domains.Replace("\n", "\nadd list=blocklist address=");
+            var resultDomains =  domains.Replace("\n", "\nadd list=blocklist address=");
 
             string writePath = @"file.txt";
 
