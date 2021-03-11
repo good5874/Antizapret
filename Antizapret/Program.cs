@@ -17,7 +17,7 @@ namespace Antizapret
 
             var response = client.Get(request);
             var content = response.Content;
-            var domains = content.Replace("*.","").Replace("\n", "\nadd list=blocklist address=");
+            var domains = content.Replace("*.","");
             domains = Regex.Replace(domains, @"[а-яА-ЯёЁ]", "");
             var resultDomains = domains.Replace("\n", "\nadd list=blocklist address=");
 
