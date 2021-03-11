@@ -13,28 +13,17 @@ namespace Antizapret
         {
             var client = new RestClient("https://api.antizapret.info");
             var request = new RestRequest("group.php");
-            request.AddParameter("data", "domain");
+            //request.AddParameter("data", "domain");
             request.AddParameter("type", "json");
 
             var response = client.Get(request);
-            //var content = "/ip firewall address-list\n" + response.Content;
-            //var domains = content.Replace("*.","");
-            //domains = Regex.Replace(domains, @"[а-яА-ЯёЁ]", "");
-            //var resultDomains =  domains.Replace("\n", "\nadd list=blocklist address=");
 
-            var domains = response.Content.Replace("*.","").Split("\n").ToList();
 
-            for (int i =0;i< domains.Count;i++)
+            var domains = response.Content.Split("\n").ToList();
+
+            for (int i = 0; i < domains.Count; i++)
             {
-                domains[i] = Regex.Replace(domains[i], @"[а-яА-ЯёЁ]", "");
-                if(domains[i] == "")
-                {
-                    domains.RemoveAt(i);
-                }
-                else
-                {
-                    domains[i] = $"add list=blocklist address={domains[i]}";
-                }
+                domains[i] = $"add list=blocklist address={domains[i]}";
             }
 
             domains = domains.Distinct().ToList();
