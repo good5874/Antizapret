@@ -47,7 +47,7 @@ namespace Antizapret
             {
                 using (StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default))
                 {
-                    sw.WriteLine(result);
+                    sw.WriteLine("/ip firewall address-list\n" + result);
                 }
                 Console.WriteLine("Запись выполнена");
             }
