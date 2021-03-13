@@ -60,14 +60,19 @@ namespace Antizapret
 
             var resultList = new List<string[]>();
 
+            var c = tmpList.Distinct().ToList();
 
-            for(int i=0;i< tmpList.Count();i++)
-            {
-                if (tmpList.FindAll(e=> e[0]== tmpList[i][0]).Count() == 1)
-                {
-                    resultList.Add(tmpList[i]);
-                }
-            }
+            var duplicates = tmpList
+             .GroupBy(r => new { S1 = r[0],S2 =r[1]  })
+             .Where(g => g.Count() > 1)
+             .ToList();
+
+            var notDuplicates = tmpList
+             .GroupBy(r => new { S1 = r[0], S2 = r[1] })
+             .Where(g => g.Count() == 1)
+             .ToList();
+
+            resultList = notDuplicates.Concat(duplicates).ToList().Select(e=>new string[] { e.Key.S1, e.Key.S2 }).ToList();
 
             var res = resultList.Select(e => $"add list=blocklist address={e[0]}.{e[1]}");
 
