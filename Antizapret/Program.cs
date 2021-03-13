@@ -19,7 +19,8 @@ namespace Antizapret
             var response = client.Get(request);
 
             var domains = response.Content.Replace("*.", "").Split("\n").Select(e => e.Split(".")).ToList();
-            var resultList = new List<string>();
+
+            var tmpList = new List<string[]>();
 
             for (int i = 0; i < domains.Count; i++)
             {
@@ -50,15 +51,27 @@ namespace Antizapret
                     str[1] = array[1];
                 }
 
+
                 if (str[1] == "ru" || str[1] == "com" || str[1] == "org" || str[1] == "net")
                 {
-                    resultList.Add($"add list=blocklist address={str[0]}.{str[1]}");
+                    tmpList.Add(str);
                 }
             }
 
-            resultList = resultList.Distinct().ToList();
+            var resultList = new List<string[]>();
 
-            string result = string.Join("\n", resultList);
+
+            for(int i=0;i< tmpList.Count();i++)
+            {
+                if (tmpList.FindAll(e=> e[0]== tmpList[i][0]).Count() == 1)
+                {
+                    resultList.Add(tmpList[i]);
+                }
+            }
+
+            var res = resultList.Select(e => $"add list=blocklist address={e[0]}.{e[1]}");
+
+            string result = string.Join("\n", res);
 
             string writePath = @"file.txt";
 
