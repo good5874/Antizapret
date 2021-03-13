@@ -13,18 +13,28 @@ namespace Antizapret
         {
             var client = new RestClient("https://api.antizapret.info");
             var request = new RestRequest("group.php");
-            //request.AddParameter("data", "domain");
+            request.AddParameter("data", "domain");
             request.AddParameter("type", "json");
 
             var response = client.Get(request);
 
 
-            var domains = response.Content.Split("\n").ToList();
+            var domains = response.Content.Replace("*.","").Split("\n").ToList();
 
             for (int i = 0; i < domains.Count; i++)
             {
-                domains[i] = $"add list=blocklist address={domains[i]}";
+                var domain = domains[i].Split(".");
+                if (domain.Last() == "ru" || domain.Last() == "com" || domain.Last() == "org" || domain.Last() == "net")
+                {
+                    domains[i] = $"add list=blocklist address={domains[i]}";
+                }
+                else
+                {
+                    domains[i]="";
+                }
             }
+
+            domains.RemoveAll(e=>e=="");
 
             domains = domains.Distinct().ToList();
 
