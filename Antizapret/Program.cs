@@ -24,7 +24,6 @@ namespace Antizapret
             {
                 if(Regex.IsMatch(domains[i], @"\p{IsCyrillic}"))
                 {
-                    var c = domains[i];
                     domains[i] = "";
                     continue;
                 }
