@@ -18,11 +18,16 @@ namespace Antizapret
 
             var response = client.Get(request);
 
-
             var domains = response.Content.Replace("*.", "").Split("\n").ToList();
 
             for (int i = 0; i < domains.Count; i++)
             {
+                if(Regex.IsMatch(domains[i], @"\p{IsCyrillic}"))
+                {
+                    var c = domains[i];
+                    domains[i] = "";
+                    continue;
+                }
                 var domain = domains[i].Split(".");
                 var str = new string [2];
                 if(domain.Length <= 1)
