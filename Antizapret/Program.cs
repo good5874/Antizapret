@@ -24,19 +24,20 @@ namespace Antizapret
 
             for (int i = 0; i < domains.Count; i++)
             {
-                var array = domains[i];
 
                 foreach (var s in domains[i])
                 {
                     if (Regex.IsMatch(s, @"\p{IsCyrillic}"))
                     {
                         domains[i] = null;
-                        continue;
+                        break;
                     }
                 }
 
+                var array = domains[i];
+
                 var str = new string[2];
-                if (array.Length <= 1)
+                if (array == null || array.Length <= 1)
                 {
                     continue;
                 }
@@ -63,7 +64,7 @@ namespace Antizapret
             var c = tmpList.Distinct().ToList();
 
             var duplicates = tmpList
-             .GroupBy(r => new { S1 = r[0],S2 =r[1]  })
+             .GroupBy(r => new { S1 = r[0], S2 = r[1] })
              .Where(g => g.Count() > 1)
              .ToList();
 
@@ -72,7 +73,7 @@ namespace Antizapret
              .Where(g => g.Count() == 1)
              .ToList();
 
-            resultList = notDuplicates.Concat(duplicates).ToList().Select(e=>new string[] { e.Key.S1, e.Key.S2 }).ToList();
+            resultList = notDuplicates.Concat(duplicates).ToList().Select(e => new string[] { e.Key.S1, e.Key.S2 }).ToList();
 
             var res = resultList.Select(e => $"add list=blocklist address={e[0]}.{e[1]}");
 
